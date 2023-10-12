@@ -58,7 +58,7 @@ yum remove -y php-*
 
 Default Location
 ================
-| Apache Location            | Path                                     |
+| Caddy Location             | Path                                     |
 |----------------------------|------------------------------------------|
 | Web root location          | /data/www/default                        |
 | Main Configuration File    | /etc/caddy/Caddyfile                     |
@@ -68,6 +68,11 @@ Default Location
 |----------------------------|------------------------------------------|
 | Data Location              | /var/lib/mysql                           |
 | my.cnf Configuration File  | /etc/my.cnf                              |
+
+| PHP Location               | Path                                     |
+|----------------------------|------------------------------------------|
+| php-fpm Configuration File | /etc/php-fpm.d/www.conf                  |
+| php.ini Configuration File | /etc/php.ini                             |
 
 Process Management
 ==================
