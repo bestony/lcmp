@@ -127,7 +127,7 @@ check_bbr_status() {
 
 # Set MariaDB root password
 _info "Please input the root password of MariaDB:"
-read -p "(Default password: Teddysun.com):" db_pass
+read -p "[$(date)] (Default password: Teddysun.com):" db_pass
 if [ -z "${db_pass}" ]; then
     db_pass="Teddysun.com"
 fi
@@ -142,7 +142,7 @@ while true; do
     _info "$(_green 2). PHP 8.0"
     _info "$(_green 3). PHP 8.1"
     _info "$(_green 4). PHP 8.2"
-    read -p "Please input a number: (Default 4) " php_version
+    read -p "[$(date)] Please input a number: (Default 4) " php_version
     [ -z "${php_version}" ] && php_version=4
     case "${php_version}" in
         1)
