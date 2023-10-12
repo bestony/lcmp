@@ -126,7 +126,7 @@ check_bbr_status() {
 }
 
 # Set MariaDB root password
-echo "Please input the root password of MariaDB:"
+_info "Please input the root password of MariaDB:"
 read -p "(Default password: Teddysun.com):" db_pass
 if [ -z "${db_pass}" ]; then
     db_pass="Teddysun.com"
@@ -186,8 +186,7 @@ _info "---------------------------"
 _info "PHP version = ${php_version}"
 _info "---------------------------"
 
-echo "Press any key to start...or Press Ctrl+C to cancel"
-echo
+_info "Press any key to start...or Press Ctrl+C to cancel"
 char=$(get_char)
 
 _info "VPS initialization start"
@@ -211,7 +210,6 @@ _error_detect "yum-config-manager --add-repo https://dl.lamp.sh/linux/rhel/teddy
 _info "Teddysun's Linux Repository installation completed"
 
 _error_detect "yum makecache"
-_error_detect "yum install -yq wget2 wget2-libs wget2-devel"
 # Replaced local curl
 _error_detect "yum install -yq curl libcurl libcurl-devel"
 
