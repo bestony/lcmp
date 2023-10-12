@@ -132,7 +132,7 @@ if [ -z "${db_pass}" ]; then
     db_pass="Teddysun.com"
 fi
 _info "---------------------------"
-_info "Password = ${db_pass}"
+_info "Password = $(_red ${db_pass})"
 _info "---------------------------"
 
 # Choose PHP version
@@ -183,7 +183,7 @@ while true; do
     esac
 done
 _info "---------------------------"
-_info "PHP version = ${php_version}"
+_info "PHP version = $(_red ${php_version})"
 _info "---------------------------"
 
 _info "Press any key to start...or Press Ctrl+C to cancel"
