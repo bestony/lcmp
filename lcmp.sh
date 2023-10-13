@@ -274,67 +274,67 @@ else
     _warn "firewalld looks like not running, skip setting up firewall"
 fi
 
-if [ -f "/etc/resolv.conf" ]; then
-    [ -f "/etc/resolv.conf.bak" ] && rm -f /etc/resolv.conf.bak
-    _error_detect "cp -pv /etc/resolv.conf /etc/resolv.conf.bak"
-    cat >/etc/resolv.conf <<EOF
-nameserver 1.1.1.1
-nameserver 8.8.8.8
-EOF
-    chattr +i /etc/resolv.conf
-    # cat /etc/resolv.conf
-    _info "Set resolver completed"
-fi
+# if [ -f "/etc/resolv.conf" ]; then
+    # [ -f "/etc/resolv.conf.bak" ] && rm -f /etc/resolv.conf.bak
+    # _error_detect "cp -pv /etc/resolv.conf /etc/resolv.conf.bak"
+    # cat >/etc/resolv.conf <<EOF
+# nameserver 1.1.1.1
+# nameserver 8.8.8.8
+# EOF
+    # chattr +i /etc/resolv.conf
+    # # cat /etc/resolv.conf
+    # _info "Set resolver completed"
+# fi
 
-if [ -f "/etc/ssh/sshd_config" ]; then
-    _error_detect "cp -pv /etc/ssh/sshd_config /etc/ssh/sshd_config.bak"
-    if rhelversion 9; then
-        cat >/etc/ssh/sshd_config <<EOF
-Port 8888
-HostKey /etc/ssh/ssh_host_rsa_key
-HostKey /etc/ssh/ssh_host_ecdsa_key
-HostKey /etc/ssh/ssh_host_ed25519_key
-SyslogFacility AUTHPRIV
-PermitRootLogin yes
-AuthorizedKeysFile .ssh/authorized_keys
-PasswordAuthentication no
-ChallengeResponseAuthentication no
-GSSAPIAuthentication no
-GSSAPICleanupCredentials no
-UsePAM yes
-X11Forwarding yes
-UseDNS no
-PrintMotd no
-Subsystem sftp /usr/libexec/openssh/sftp-server
-Include /etc/crypto-policies/back-ends/opensshserver.config
-EOF
-    else
-        cat >/etc/ssh/sshd_config <<EOF
-Port 8888
-HostKey /etc/ssh/ssh_host_rsa_key
-HostKey /etc/ssh/ssh_host_ecdsa_key
-HostKey /etc/ssh/ssh_host_ed25519_key
-SyslogFacility AUTHPRIV
-PermitRootLogin yes
-AuthorizedKeysFile .ssh/authorized_keys
-PasswordAuthentication no
-ChallengeResponseAuthentication no
-GSSAPIAuthentication no
-GSSAPICleanupCredentials no
-UsePAM yes
-X11Forwarding yes
-UseDNS no
-AcceptEnv LANG LC_CTYPE LC_NUMERIC LC_TIME LC_COLLATE LC_MONETARY LC_MESSAGES
-AcceptEnv LC_PAPER LC_NAME LC_ADDRESS LC_TELEPHONE LC_MEASUREMENT
-AcceptEnv LC_IDENTIFICATION LC_ALL LANGUAGE
-AcceptEnv XMODIFIERS
-Subsystem sftp /usr/libexec/openssh/sftp-server
-EOF
-    fi
-    _error_detect "systemctl restart sshd"
-    # systemctl status sshd > /dev/null 2>&1
-    _info "Set sshd completed"
-fi
+# if [ -f "/etc/ssh/sshd_config" ]; then
+    # _error_detect "cp -pv /etc/ssh/sshd_config /etc/ssh/sshd_config.bak"
+    # if rhelversion 9; then
+        # cat >/etc/ssh/sshd_config <<EOF
+# Port 8888
+# HostKey /etc/ssh/ssh_host_rsa_key
+# HostKey /etc/ssh/ssh_host_ecdsa_key
+# HostKey /etc/ssh/ssh_host_ed25519_key
+# SyslogFacility AUTHPRIV
+# PermitRootLogin yes
+# AuthorizedKeysFile .ssh/authorized_keys
+# PasswordAuthentication no
+# ChallengeResponseAuthentication no
+# GSSAPIAuthentication no
+# GSSAPICleanupCredentials no
+# UsePAM yes
+# X11Forwarding yes
+# UseDNS no
+# PrintMotd no
+# Subsystem sftp /usr/libexec/openssh/sftp-server
+# Include /etc/crypto-policies/back-ends/opensshserver.config
+# EOF
+    # else
+        # cat >/etc/ssh/sshd_config <<EOF
+# Port 8888
+# HostKey /etc/ssh/ssh_host_rsa_key
+# HostKey /etc/ssh/ssh_host_ecdsa_key
+# HostKey /etc/ssh/ssh_host_ed25519_key
+# SyslogFacility AUTHPRIV
+# PermitRootLogin yes
+# AuthorizedKeysFile .ssh/authorized_keys
+# PasswordAuthentication no
+# ChallengeResponseAuthentication no
+# GSSAPIAuthentication no
+# GSSAPICleanupCredentials no
+# UsePAM yes
+# X11Forwarding yes
+# UseDNS no
+# AcceptEnv LANG LC_CTYPE LC_NUMERIC LC_TIME LC_COLLATE LC_MONETARY LC_MESSAGES
+# AcceptEnv LC_PAPER LC_NAME LC_ADDRESS LC_TELEPHONE LC_MEASUREMENT
+# AcceptEnv LC_IDENTIFICATION LC_ALL LANGUAGE
+# AcceptEnv XMODIFIERS
+# Subsystem sftp /usr/libexec/openssh/sftp-server
+# EOF
+    # fi
+    # _error_detect "systemctl restart sshd"
+    # # systemctl status sshd > /dev/null 2>&1
+    # _info "Set sshd completed"
+# fi
 
 if check_kernel_version; then
     if ! check_bbr_status; then
