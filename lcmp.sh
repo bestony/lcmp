@@ -125,6 +125,10 @@ check_bbr_status() {
     fi
 }
 
+# Check OS
+if ! rhelversion 7 && ! rhelversion 8 && ! rhelversion 9; then
+    _error "Not supported OS, please change OS to Enterprise Linux 7 or 8 or 9 and try again."
+fi
 # Set MariaDB root password
 _info "Please input the root password of MariaDB:"
 read -p "[$(date)] (Default password: Teddysun.com):" db_pass
@@ -210,7 +214,7 @@ _error_detect "yum-config-manager --add-repo https://dl.lamp.sh/linux/rhel/teddy
 _info "Teddysun's Linux Repository installation completed"
 
 _error_detect "yum makecache"
-# Replaced local curl
+# Replaced local curl from teddysun linux Repository
 _error_detect "yum install -yq curl libcurl libcurl-devel"
 
 if [ -s "/etc/selinux/config" ] && grep 'SELINUX=enforcing' /etc/selinux/config; then
@@ -224,35 +228,35 @@ if [ -s "/etc/motd.d/cockpit" ]; then
     _info "Delete /etc/motd.d/cockpit completed"
 fi
 
-if systemctl status postfix >/dev/null 2>&1; then
-    _error_detect "systemctl stop postfix"
-    _error_detect "systemctl disable postfix"
-    _info "Disable postfix completed"
-fi
+# if systemctl status postfix >/dev/null 2>&1; then
+    # _error_detect "systemctl stop postfix"
+    # _error_detect "systemctl disable postfix"
+    # _info "Disable postfix completed"
+# fi
 
-if systemctl status rngd >/dev/null 2>&1; then
-    _error_detect "systemctl stop rngd"
-    _error_detect "systemctl disable rngd"
-    _info "Disable rngd completed"
-fi
+# if systemctl status rngd >/dev/null 2>&1; then
+    # _error_detect "systemctl stop rngd"
+    # _error_detect "systemctl disable rngd"
+    # _info "Disable rngd completed"
+# fi
 
-if systemctl status rpcbind >/dev/null 2>&1; then
-    _error_detect "systemctl stop rpcbind"
-    _error_detect "systemctl stop rpcbind.socket"
-    _error_detect "systemctl disable rpcbind"
-    _error_detect "systemctl disable rpcbind.socket"
-    _info "Disable rpcbind completed"
-fi
+# if systemctl status rpcbind >/dev/null 2>&1; then
+    # _error_detect "systemctl stop rpcbind"
+    # _error_detect "systemctl stop rpcbind.socket"
+    # _error_detect "systemctl disable rpcbind"
+    # _error_detect "systemctl disable rpcbind.socket"
+    # _info "Disable rpcbind completed"
+# fi
 
-if systemctl status sssd >/dev/null 2>&1; then
-    _error_detect "systemctl stop sssd"
-    _error_detect "systemctl stop sssd-kcm"
-    _error_detect "systemctl stop sssd-kcm.socket"
-    _error_detect "systemctl disable sssd"
-    _error_detect "systemctl disable sssd-kcm"
-    _error_detect "systemctl disable sssd-kcm.socket"
-    _info "Disable sssd completed"
-fi
+# if systemctl status sssd >/dev/null 2>&1; then
+    # _error_detect "systemctl stop sssd"
+    # _error_detect "systemctl stop sssd-kcm"
+    # _error_detect "systemctl stop sssd-kcm.socket"
+    # _error_detect "systemctl disable sssd"
+    # _error_detect "systemctl disable sssd-kcm"
+    # _error_detect "systemctl disable sssd-kcm.socket"
+    # _info "Disable sssd completed"
+# fi
 
 if systemctl status firewalld >/dev/null 2>&1; then
     default_zone="$(firewall-cmd --get-default-zone)"
@@ -367,24 +371,23 @@ _info "VPS initialization completed"
 sleep 3
 clear
 _info "LCMP (Linux + Caddy + MariaDB + PHP) rpm installation start"
-# if rhelversion 7; then
-    # _error_detect "yum install -yq yum-plugin-copr"
-    # _error_detect "yum copr enable -yq @caddy/caddy"
-    # _error_detect "yum install -yq caddy"
-# fi
-# if rhelversion 8 || rhelversion 9; then
-    # _error_detect "yum install -yq dnf-plugins-core"
-    # _error_detect "yum copr enable -yq @caddy/caddy"
-    # _error_detect "yum install -yq caddy"
-# fi
-_error_detect "yum install -yq caddy"
+if rhelversion 7; then
+    _error_detect "yum install -yq yum-plugin-copr"
+    _error_detect "yum copr enable -yq @caddy/caddy"
+    _error_detect "yum install -yq caddy"
+fi
+if rhelversion 8 || rhelversion 9; then
+    _error_detect "yum install -yq dnf-plugins-core"
+    _error_detect "yum copr enable -yq @caddy/caddy"
+    _error_detect "yum install -yq caddy"
+fi
 _info "Caddy installation completed"
 
 _error_detect "mkdir -p /data/www/default"
 _error_detect "mkdir -p /var/log/caddy/"
 _error_detect "mkdir -p /etc/caddy/conf.d/"
-_error_detect "chown -R caddy.caddy /data/www/default"
-_error_detect "chown -R caddy.caddy /var/log/caddy/"
+_error_detect "chown -R caddy:caddy /data/www/default"
+_error_detect "chown -R caddy:caddy /var/log/caddy/"
 cat >/etc/caddy/Caddyfile <<EOF
 {
 	admin off
@@ -418,6 +421,7 @@ EOF
 _error_detect "cp -f ${cur_dir}/conf/favicon.ico /data/www/default/"
 _error_detect "cp -f ${cur_dir}/conf/index.html /data/www/default/"
 _error_detect "cp -f ${cur_dir}/conf/lcmp.png /data/www/default/"
+_error_detect "chown -R caddy:caddy /data/www"
 _info "Set Caddy completed"
 
 _error_detect "wget -qO mariadb_repo_setup.sh https://downloads.mariadb.com/MariaDB/mariadb_repo_setup"
@@ -446,6 +450,7 @@ flush privileges;
 exit
 EOF
 _error_detect "cd /data/www/default"
+# Install phpMyAdmin
 _error_detect "wget -q https://dl.lamp.sh/files/pma.tar.gz"
 _error_detect "tar zxf pma.tar.gz"
 _error_detect "rm -f pma.tar.gz"
@@ -469,7 +474,9 @@ if rhelversion 9; then
     _error_detect "yum module reset -yq php"
     _error_detect "yum module install -yq ${remi_php}"
 fi
-_error_detect "yum install -yq php-common php-fpm php-cli php-bcmath php-embedded php-gd php-imap php-mysqlnd php-dba php-pdo php-pdo-dblib php-pgsql php-odbc php-enchant php-gmp php-intl php-ldap php-snmp php-soap php-tidy php-opcache php-process php-pspell php-shmop php-sodium php-ffi php-brotli php-lz4 php-xz php-zstd"
+_error_detect "yum install -yq php-common php-fpm php-cli php-bcmath php-embedded php-gd php-imap php-mysqlnd php-dba php-pdo php-pdo-dblib"
+_error_detect "yum install -yq php-pgsql php-odbc php-enchant php-gmp php-intl php-ldap php-snmp php-soap php-tidy php-opcache php-process"
+_error_detect "yum install -yq php-pspell php-shmop php-sodium php-ffi php-brotli php-lz4 php-xz php-zstd php-pecl-rar"
 _error_detect "yum install -yq php-pecl-imagick-im7 php-pecl-zip php-pecl-mongodb php-pecl-grpc php-pecl-yaml php-pecl-uuid composer"
 _info "PHP installation completed"
 
@@ -477,9 +484,9 @@ sed -i "s@^user.*@user = caddy@" /etc/php-fpm.d/www.conf
 sed -i "s@^group.*@group = caddy@" /etc/php-fpm.d/www.conf
 sed -i "s@^listen.acl_users.*@listen.acl_users = apache,nginx,caddy@" /etc/php-fpm.d/www.conf
 sed -i "s@^;php_value\[opcache.file_cache\].*@php_value\[opcache.file_cache\] = /var/lib/php/opcache@" /etc/php-fpm.d/www.conf
-_error_detect "chown root.caddy /var/lib/php/session"
-_error_detect "chown root.caddy /var/lib/php/wsdlcache"
-_error_detect "chown root.caddy /var/lib/php/opcache"
+_error_detect "chown root:caddy /var/lib/php/session"
+_error_detect "chown root:caddy /var/lib/php/wsdlcache"
+_error_detect "chown root:caddy /var/lib/php/opcache"
 sed -i "s@^disable_functions.*@disable_functions = passthru,exec,shell_exec,system,chroot,chgrp,chown,proc_open,proc_get_status,ini_alter,ini_alter,ini_restore@" /etc/php.ini
 sed -i "s@^max_execution_time.*@max_execution_time = 300@" /etc/php.ini
 sed -i "s@^max_input_time.*@max_input_time = 300@" /etc/php.ini
