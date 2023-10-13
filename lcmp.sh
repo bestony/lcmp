@@ -155,6 +155,7 @@ while true; do
         else
             remi_php="php:remi-7.4"
         fi
+        php_ver="7.4"
         break
         ;;
         2)
@@ -163,6 +164,7 @@ while true; do
         else
             remi_php="php:remi-8.0"
         fi
+        php_ver="8.0"
         break
         ;;
         3)
@@ -171,6 +173,7 @@ while true; do
         else
             remi_php="php:remi-8.1"
         fi
+        php_ver="8.1"
         break
         ;;
         4)
@@ -179,6 +182,7 @@ while true; do
         else
             remi_php="php:remi-8.2"
         fi
+        php_ver="8.2"
         break
         ;;
         *)
@@ -187,7 +191,7 @@ while true; do
     esac
 done
 _info "---------------------------"
-_info "PHP version = $(_red ${php_version})"
+_info "PHP version = $(_red ${php_ver})"
 _info "---------------------------"
 
 _info "Press any key to start...or Press Ctrl+C to cancel"
