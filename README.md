@@ -1,3 +1,9 @@
+<div align="center">
+    <a href="https://teddysun.com/700.html" target="_blank">
+        <img alt="LCMP" src="https://github.com/teddysun/lcmp/raw/master/conf/lcmp.png">
+    </a>
+</div>
+
 Description
 ===========
 LCMP is a powerful bash script for the installation of Caddy2 + MariaDB + PHP and so on.
