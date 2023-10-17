@@ -513,11 +513,11 @@ systemctl enable php-fpm >/dev/null 2>&1
 _info "systemctl enable caddy"
 systemctl enable caddy >/dev/null 2>&1
 pkill -9 gpg-agent
-_info "ps -ef | grep -v grep | grep \"/usr/bin/caddy\""
-ps -ef | grep -v grep | grep "/usr/bin/caddy"
-_info "ps -ef | grep -v grep | grep php-fpm"
-ps -ef | grep -v grep | grep php-fpm
-_info "ps -ef | grep -v grep | grep mariadbd"
-ps -ef | grep -v grep | grep mariadbd
+_info "systemctl status mariadb"
+systemctl --no-pager -l status mariadb
+_info "systemctl status php-fpm"
+systemctl --no-pager -l status php-fpm
+_info "systemctl status caddy"
+systemctl --no-pager -l status caddy
 echo
 _info "LCMP (Linux + Caddy + MariaDB + PHP) rpm installation completed"
