@@ -378,13 +378,12 @@ _info "LCMP (Linux + Caddy + MariaDB + PHP) rpm installation start"
 if rhelversion 7; then
     _error_detect "yum install -yq yum-plugin-copr"
     _error_detect "yum copr enable -yq @caddy/caddy"
-    _error_detect "yum install -yq caddy"
 fi
 if rhelversion 8 || rhelversion 9; then
     _error_detect "yum install -yq dnf-plugins-core"
     _error_detect "yum copr enable -yq @caddy/caddy"
-    _error_detect "yum install -yq caddy"
 fi
+_error_detect "yum install -yq caddy"
 _info "Caddy installation completed"
 
 _error_detect "mkdir -p /data/www/default"
