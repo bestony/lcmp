@@ -519,4 +519,6 @@ systemctl --no-pager -l status php-fpm
 _info "systemctl status caddy"
 systemctl --no-pager -l status caddy
 echo
+netstat -nxtulpe
+echo
 _info "LCMP (Linux + Caddy + MariaDB + PHP) rpm installation completed"
