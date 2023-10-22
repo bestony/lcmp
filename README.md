@@ -8,7 +8,7 @@
 
 LCMP is a powerful bash script for the installation of Caddy2 + MariaDB + PHP and so on.
 
-You can install Caddy2 + MariaDB + PHP in a smaller memory VPS by yum command, Just need to input numbers to choose what you want to install before installation.
+You can install Caddy2 + MariaDB + PHP in a smaller memory VPS by yum or apt-get command, Just need to input numbers to choose what you want to install before installation.
 
 And all things will be done in a few minutes.
 
@@ -36,6 +36,8 @@ And all things will be done in a few minutes.
 - Caddy 2
 - MariaDB 10.11
 - PHP-7.4, PHP-8.0, PHP-8.1, PHP-8.2
+
+rpm provided by [remi Repository](https://rpms.remirepo.net/), deb provided by [deb.sury.org](https://deb.sury.org/)
 
 ## Installation
 
