@@ -52,7 +52,7 @@ And all things will be done in a few minutes.
 
 ## Installation
 
-- If your server's OS system: Enterprise Linux 7/8/9
+- If your server's OS: Enterprise Linux 7 / 8 / 9
 ```bash
 yum -y install wget git
 git clone https://github.com/teddysun/lcmp.git
@@ -61,7 +61,7 @@ chmod 755 *.sh
 ./lcmp.sh 2>&1 | tee lcmp.log
 ```
 
-- If your server's OS system: Debian/Ubuntu
+- If your server's OS: Debian 10+ / Ubuntu 20.04+
 ```bash
 apt-get -y install wget git
 git clone https://github.com/teddysun/lcmp.git
@@ -72,7 +72,7 @@ chmod 755 *.sh
 
 ## Upgrade
 
-- If your server's OS system: Enterprise Linux 7/8/9
+- If your server's OS: Enterprise Linux 7 / 8 / 9
 ```bash
 yum update -y caddy
 yum update -y MariaDB-*
@@ -83,7 +83,7 @@ chown root:caddy /var/lib/php/wsdlcache
 chown root:caddy /var/lib/php/opcache
 ```
 
-- If your server's OS system: Debian/Ubuntu
+- If your server's OS: Debian 10+ / Ubuntu 20.04+
 ```bash
 apt-get install --only-upgrade -y caddy
 apt-get install --only-upgrade -y mariadb-*
@@ -94,14 +94,14 @@ apt-get install --only-upgrade -y php${php_ver}-*
 
 ## Uninstall
 
-- If your server's OS system: Enterprise Linux 7/8/9
+- If your server's OS: Enterprise Linux 7 / 8 / 9
 ```bash
 yum remove -y caddy
 yum remove -y MariaDB-*
 yum remove -y php-*
 ```
 
-- If your server's OS system: Debian/Ubuntu
+- If your server's OS: Debian 10+ / Ubuntu 20.04+
 ```bash
 apt-get remove -y caddy
 apt-get remove -y mariadb-*
