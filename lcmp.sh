@@ -78,7 +78,7 @@ _exists() {
 _error_detect() {
     local cmd="$1"
     _info "${cmd}"
-    eval ${cmd} 1>/dev/null
+    eval "${cmd}" 1>/dev/null
     if [ $? -ne 0 ]; then
         _error "Execution command (${cmd}) failed, please check it and try again."
     fi
@@ -159,8 +159,7 @@ get_ubuntuversion() {
     if check_sys ubuntu; then
         local version=$(get_opsy)
         local code=$1
-        echo ${version} | grep -q "${code}"
-        if [ $? -eq 0 ]; then
+        if echo "${version}" | grep -q "${code}"; then
             return 0
         else
             return 1
@@ -185,7 +184,7 @@ check_kernel_version() {
 
 check_bbr_status() {
     local param=$(sysctl net.ipv4.tcp_congestion_control | awk '{print $3}')
-    if [[ x"${param}" == x"bbr" ]]; then
+    if [[ "${param}" == "bbr" ]]; then
         return 0
     else
         return 1
@@ -193,9 +192,9 @@ check_bbr_status() {
 }
 
 # Check OS
-if ! get_rhelversion 7 && ! get_rhelversion 8 && ! get_rhelversion 9 && \
-   ! get_debianversion 10 && ! get_debianversion 11 && ! get_debianversion 12 && \
-   ! get_ubuntuversion 20.04 && ! get_ubuntuversion 22.04; then
+if ! get_rhelversion 7 && ! get_rhelversion 8 && ! get_rhelversion 9 &&
+    ! get_debianversion 10 && ! get_debianversion 11 && ! get_debianversion 12 &&
+    ! get_ubuntuversion 20.04 && ! get_ubuntuversion 22.04; then
     _error "Not supported OS, please change OS to Enterprise Linux 7+ or Debian 10+ or Ubuntu 20.04+ and try again."
 fi
 # Set MariaDB root password
@@ -218,7 +217,7 @@ while true; do
     read -p "[$(date)] Please input a number: (Default 4) " php_version
     [ -z "${php_version}" ] && php_version=4
     case "${php_version}" in
-        1)
+    1)
         php_ver="7.4"
         if check_sys rhel; then
             if get_rhelversion 7; then
@@ -229,7 +228,7 @@ while true; do
         fi
         break
         ;;
-        2)
+    2)
         php_ver="8.0"
         if check_sys rhel; then
             if get_rhelversion 7; then
@@ -240,7 +239,7 @@ while true; do
         fi
         break
         ;;
-        3)
+    3)
         php_ver="8.1"
         if check_sys rhel; then
             if get_rhelversion 7; then
@@ -251,7 +250,7 @@ while true; do
         fi
         break
         ;;
-        4)
+    4)
         php_ver="8.2"
         if check_sys rhel; then
             if get_rhelversion 7; then
@@ -262,7 +261,7 @@ while true; do
         fi
         break
         ;;
-        *)
+    *)
         _info "Input error! Please only input a number 1 2 3 4"
         ;;
     esac
@@ -348,17 +347,6 @@ if systemctl status systemd-journald >/dev/null 2>&1; then
     _info "Set systemd-journald completed"
 fi
 
-# Add 2GB SWAP if not exist
-# SWAP=$(LANG=C; free -m | awk '/Swap/ {print $2}')
-# if [ "${SWAP}" == "0" ]; then
-    # _error_detect "dd if=/dev/zero of=/swapfile bs=1024 count=2048k"
-    # _error_detect "chmod 600 /swapfile"
-    # _error_detect "mkswap /swapfile"
-    # _error_detect "swapon /swapfile"
-    # echo "/swapfile   swap        swap    defaults        0   0" >> /etc/fstab
-    # _info "Set Swap completed"
-# fi
-
 echo
 netstat -nxtulpe
 echo
@@ -438,7 +426,7 @@ _error_detect "tar zxf pma.tar.gz"
 _error_detect "rm -f pma.tar.gz"
 _error_detect "cd ${cur_dir}"
 _info "/usr/bin/mysql -uroot -p 2>/dev/null < /data/www/default/pma/sql/create_tables.sql"
-/usr/bin/mysql -uroot -p${db_pass} 2>/dev/null < /data/www/default/pma/sql/create_tables.sql
+/usr/bin/mysql -uroot -p${db_pass} 2>/dev/null </data/www/default/pma/sql/create_tables.sql
 _info "Set MariaDB completed"
 
 if check_sys rhel; then
@@ -474,7 +462,7 @@ elif check_sys debian || check_sys ubuntu; then
     sock_location="/run/mysqld/mysqld.sock"
     if check_sys debian; then
         _error_detect "curl -sSLo /usr/share/keyrings/deb.sury.org-php.gpg https://packages.sury.org/php/apt.gpg"
-        echo "deb [signed-by=/usr/share/keyrings/deb.sury.org-php.gpg] https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list
+        echo "deb [signed-by=/usr/share/keyrings/deb.sury.org-php.gpg] https://packages.sury.org/php/ $(lsb_release -sc) main" >/etc/apt/sources.list.d/php.list
     fi
     if check_sys ubuntu; then
         _error_detect "add-apt-repository -y ppa:ondrej/php"
@@ -510,7 +498,7 @@ elif check_sys debian || check_sys ubuntu; then
 php_value[session.save_handler] = files
 php_value[session.save_path]    = /var/lib/php/session
 php_value[soap.wsdl_cache_dir]  = /var/lib/php/wsdlcache
-php_value[opcache.file_cache] = /var/lib/php/opcache
+php_value[opcache.file_cache]   = /var/lib/php/opcache
 EOF
 fi
 sed -i "s@^disable_functions.*@disable_functions = passthru,exec,shell_exec,system,chroot,chgrp,chown,proc_open,proc_get_status,ini_alter,ini_alter,ini_restore@" ${php_ini}
