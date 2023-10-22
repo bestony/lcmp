@@ -18,8 +18,6 @@ trap _exit INT QUIT TERM
 
 cur_dir="$(cd -P -- "$(dirname -- "$0")" && pwd -P)"
 
-[ ${EUID} -ne 0 ] && _red "This script must be run as root!\n" && exit 1
-
 _red() {
     printf '\033[1;31;31m%b\033[0m' "$1"
 }
@@ -190,6 +188,9 @@ check_bbr_status() {
         return 1
     fi
 }
+
+# Check user
+[ ${EUID} -ne 0 ] && _red "This script must be run as root!\n" && exit 1
 
 # Check OS
 if ! get_rhelversion 7 && ! get_rhelversion 8 && ! get_rhelversion 9 &&
