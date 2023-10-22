@@ -206,7 +206,7 @@ if ! get_rhelversion 7 && ! get_rhelversion 8 && ! get_rhelversion 9 &&
 fi
 # Set MariaDB root password
 _info "Please input the root password of MariaDB:"
-read -p "[$(date)] (Default password: Teddysun.com):" db_pass
+read -r -p "[$(date)] (Default password: Teddysun.com):" db_pass
 if [ -z "${db_pass}" ]; then
     db_pass="Teddysun.com"
 fi
@@ -221,7 +221,7 @@ while true; do
     _info "$(_green 2). PHP 8.0"
     _info "$(_green 3). PHP 8.1"
     _info "$(_green 4). PHP 8.2"
-    read -p "[$(date)] Please input a number: (Default 4) " php_version
+    read -r -p "[$(date)] Please input a number: (Default 4) " php_version
     [ -z "${php_version}" ] && php_version=4
     case "${php_version}" in
     1)
@@ -338,9 +338,11 @@ if check_kernel_version; then
         sed -i '/net.core.default_qdisc/d' /etc/sysctl.conf
         sed -i '/net.ipv4.tcp_congestion_control/d' /etc/sysctl.conf
         sed -i '/net.core.rmem_max/d' /etc/sysctl.conf
-        echo "net.core.default_qdisc = fq" >>/etc/sysctl.conf
-        echo "net.ipv4.tcp_congestion_control = bbr" >>/etc/sysctl.conf
-        echo "net.core.rmem_max=2500000" >>/etc/sysctl.conf
+        cat >>/etc/sysctl.conf <<EOF
+net.core.default_qdisc = fq
+net.ipv4.tcp_congestion_control = bbr
+net.core.rmem_max = 2500000
+EOF
         sysctl -p >/dev/null 2>&1
         _info "Set bbr completed"
     fi
@@ -416,7 +418,7 @@ sed -i "${lnum}acharacter-set-server = utf8mb4\n\n\[client-mariadb\]\ndefault-ch
 _error_detect "systemctl start mariadb"
 /usr/bin/mysql -e "grant all privileges on *.* to root@'127.0.0.1' identified by \"${db_pass}\" with grant option;"
 /usr/bin/mysql -e "grant all privileges on *.* to root@'localhost' identified by \"${db_pass}\" with grant option;"
-/usr/bin/mysql -uroot -p${db_pass} 2>/dev/null <<EOF
+/usr/bin/mysql -uroot -p"${db_pass}" 2>/dev/null <<EOF
 drop database if exists test;
 delete from mysql.db where user='';
 delete from mysql.db where user='PUBLIC';
@@ -433,7 +435,7 @@ _error_detect "tar zxf pma.tar.gz"
 _error_detect "rm -f pma.tar.gz"
 _error_detect "cd ${cur_dir}"
 _info "/usr/bin/mysql -uroot -p 2>/dev/null < /data/www/default/pma/sql/create_tables.sql"
-/usr/bin/mysql -uroot -p${db_pass} 2>/dev/null </data/www/default/pma/sql/create_tables.sql
+/usr/bin/mysql -uroot -p"${db_pass}" 2>/dev/null </data/www/default/pma/sql/create_tables.sql
 _info "Set MariaDB completed"
 
 if check_sys rhel; then
@@ -556,14 +558,14 @@ sleep 1
 _info "systemctl enable mariadb"
 systemctl enable mariadb >/dev/null 2>&1
 _info "systemctl enable ${php_fpm}"
-systemctl enable ${php_fpm} >/dev/null 2>&1
+systemctl enable "${php_fpm}" >/dev/null 2>&1
 _info "systemctl enable caddy"
 systemctl enable caddy >/dev/null 2>&1
 pkill -9 gpg-agent
 _info "systemctl status mariadb"
 systemctl --no-pager -l status mariadb
 _info "systemctl status ${php_fpm}"
-systemctl --no-pager -l status ${php_fpm}
+systemctl --no-pager -l status "${php_fpm}"
 _info "systemctl status caddy"
 systemctl --no-pager -l status caddy
 echo
