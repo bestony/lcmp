@@ -76,8 +76,7 @@ _exists() {
 _error_detect() {
     local cmd="$1"
     _info "${cmd}"
-    eval "${cmd}" 1>/dev/null
-    if [ $? -ne 0 ]; then
+    if ! eval "${cmd}" 1>/dev/null; then
         _error "Execution command (${cmd}) failed, please check it and try again."
     fi
 }
@@ -114,7 +113,7 @@ get_char() {
     dd if=/dev/tty bs=1 count=1 2>/dev/null
     stty -raw
     stty echo
-    stty ${SAVEDSTTY}
+    stty "${SAVEDSTTY}"
 }
 
 get_opsy() {
@@ -125,9 +124,11 @@ get_opsy() {
 
 get_rhelversion() {
     if check_sys rhel; then
-        local version=$(get_opsy)
+        local version
         local code=$1
-        local main_ver=$(echo ${version} | grep -oE "[0-9.]+")
+        local main_ver
+        version=$(get_opsy)
+        main_ver=$(echo "${version}" | grep -oE "[0-9.]+")
         if [ "${main_ver%%.*}" == "${code}" ]; then
             return 0
         else
@@ -140,9 +141,11 @@ get_rhelversion() {
 
 get_debianversion() {
     if check_sys debian; then
-        local version=$(get_opsy)
+        local version
         local code=$1
-        local main_ver=$(echo ${version} | grep -oE "[0-9.]+")
+        local main_ver
+        version=$(get_opsy)
+        main_ver=$(echo "${version}" | grep -oE "[0-9.]+")
         if [ "${main_ver%%.*}" == "${code}" ]; then
             return 0
         else
@@ -155,8 +158,9 @@ get_debianversion() {
 
 get_ubuntuversion() {
     if check_sys ubuntu; then
-        local version=$(get_opsy)
+        local version
         local code=$1
+        version=$(get_opsy)
         if echo "${version}" | grep -q "${code}"; then
             return 0
         else
@@ -172,8 +176,9 @@ version_ge() {
 }
 
 check_kernel_version() {
-    local kernel_version=$(uname -r | cut -d- -f1)
-    if version_ge ${kernel_version} 4.9; then
+    local kernel_version
+    kernel_version=$(uname -r | cut -d- -f1)
+    if version_ge "${kernel_version}" 4.9; then
         return 0
     else
         return 1
@@ -181,7 +186,8 @@ check_kernel_version() {
 }
 
 check_bbr_status() {
-    local param=$(sysctl net.ipv4.tcp_congestion_control | awk '{print $3}')
+    local param
+    param=$(sysctl net.ipv4.tcp_congestion_control | awk '{print $3}')
     if [[ "${param}" == "bbr" ]]; then
         return 0
     else
@@ -205,7 +211,7 @@ if [ -z "${db_pass}" ]; then
     db_pass="Teddysun.com"
 fi
 _info "---------------------------"
-_info "Password = $(_red ${db_pass})"
+_info "Password = $(_red "${db_pass}")"
 _info "---------------------------"
 
 # Choose PHP version
@@ -268,7 +274,7 @@ while true; do
     esac
 done
 _info "---------------------------"
-_info "PHP version = $(_red ${php_ver})"
+_info "PHP version = $(_red "${php_ver}")"
 _info "---------------------------"
 
 _info "Press any key to start...or Press Ctrl+C to cancel"
@@ -306,8 +312,8 @@ if check_sys rhel; then
     fi
     if systemctl status firewalld >/dev/null 2>&1; then
         default_zone="$(firewall-cmd --get-default-zone)"
-        firewall-cmd --permanent --add-service=https --zone=${default_zone} >/dev/null 2>&1
-        firewall-cmd --permanent --add-service=http --zone=${default_zone} >/dev/null 2>&1
+        firewall-cmd --permanent --add-service=https --zone="${default_zone}" >/dev/null 2>&1
+        firewall-cmd --permanent --add-service=http --zone="${default_zone}" >/dev/null 2>&1
         firewall-cmd --reload >/dev/null 2>&1
         sed -i 's@AllowZoneDrifting=yes@AllowZoneDrifting=no@' /etc/firewalld/firewalld.conf
         _error_detect "systemctl restart firewalld"
@@ -403,10 +409,10 @@ elif check_sys debian || check_sys ubuntu; then
 fi
 _info "MariaDB installation completed"
 
-lnum=$(sed -n '/\[mysqld\]/=' ${mariadb_cnf})
-sed -i "${lnum}ainnodb_buffer_pool_size = 100M\nmax_allowed_packet = 1024M\nnet_read_timeout = 3600\nnet_write_timeout = 3600" ${mariadb_cnf}
-lnum=$(sed -n '/\[mariadb\]/=' ${mariadb_cnf})
-sed -i "${lnum}acharacter-set-server = utf8mb4\n\n\[client-mariadb\]\ndefault-character-set = utf8mb4" ${mariadb_cnf}
+lnum=$(sed -n '/\[mysqld\]/=' "${mariadb_cnf}")
+sed -i "${lnum}ainnodb_buffer_pool_size = 100M\nmax_allowed_packet = 1024M\nnet_read_timeout = 3600\nnet_write_timeout = 3600" "${mariadb_cnf}"
+lnum=$(sed -n '/\[mariadb\]/=' "${mariadb_cnf}")
+sed -i "${lnum}acharacter-set-server = utf8mb4\n\n\[client-mariadb\]\ndefault-character-set = utf8mb4" "${mariadb_cnf}"
 _error_detect "systemctl start mariadb"
 /usr/bin/mysql -e "grant all privileges on *.* to root@'127.0.0.1' identified by \"${db_pass}\" with grant option;"
 /usr/bin/mysql -e "grant all privileges on *.* to root@'localhost' identified by \"${db_pass}\" with grant option;"
@@ -478,39 +484,39 @@ elif check_sys debian || check_sys ubuntu; then
 fi
 _info "PHP installation completed"
 
-sed -i "s@^user.*@user = caddy@" ${php_conf}
-sed -i "s@^group.*@group = caddy@" ${php_conf}
+sed -i "s@^user.*@user = caddy@" "${php_conf}"
+sed -i "s@^group.*@group = caddy@" "${php_conf}"
 if check_sys rhel; then
-    sed -i "s@^listen.acl_users.*@listen.acl_users = apache,nginx,caddy@" ${php_conf}
-    sed -i "s@^;php_value\[opcache.file_cache\].*@php_value\[opcache.file_cache\] = /var/lib/php/opcache@" ${php_conf}
+    sed -i "s@^listen.acl_users.*@listen.acl_users = apache,nginx,caddy@" "${php_conf}"
+    sed -i "s@^;php_value\[opcache.file_cache\].*@php_value\[opcache.file_cache\] = /var/lib/php/opcache@" "${php_conf}"
 elif check_sys debian || check_sys ubuntu; then
-    sed -i "s@^listen.owner.*@;&@" ${php_conf}
-    sed -i "s@^listen.group.*@;&@" ${php_conf}
-    sed -i "s@^;listen.acl_users.*@listen.acl_users = caddy@" ${php_conf}
-    sed -i "s@^;listen.allowed_clients.*@listen.allowed_clients = 127.0.0.1@" ${php_conf}
-    sed -i "s@^pm.max_children.*@pm.max_children = 50@" ${php_conf}
-    sed -i "s@^pm.start_servers.*@pm.start_servers = 5@" ${php_conf}
-    sed -i "s@^pm.min_spare_servers.*@pm.min_spare_servers = 5@" ${php_conf}
-    sed -i "s@^pm.max_spare_servers.*@pm.max_spare_servers = 35@" ${php_conf}
-    sed -i "s@^;slowlog.*@slowlog = /var/log/www-slow.log@" ${php_conf}
-    sed -i "s@^;php_admin_value\[error_log\].*@php_admin_value[error_log] = /var/log/www-error.log@" ${php_conf}
-    sed -i "s@^;php_admin_flag\[log_errors\].*@php_admin_flag[log_errors] = on@" ${php_conf}
-    cat >>${php_conf} <<EOF
+    sed -i "s@^listen.owner.*@;&@" "${php_conf}"
+    sed -i "s@^listen.group.*@;&@" "${php_conf}"
+    sed -i "s@^;listen.acl_users.*@listen.acl_users = caddy@" "${php_conf}"
+    sed -i "s@^;listen.allowed_clients.*@listen.allowed_clients = 127.0.0.1@" "${php_conf}"
+    sed -i "s@^pm.max_children.*@pm.max_children = 50@" "${php_conf}"
+    sed -i "s@^pm.start_servers.*@pm.start_servers = 5@" "${php_conf}"
+    sed -i "s@^pm.min_spare_servers.*@pm.min_spare_servers = 5@" "${php_conf}"
+    sed -i "s@^pm.max_spare_servers.*@pm.max_spare_servers = 35@" "${php_conf}"
+    sed -i "s@^;slowlog.*@slowlog = /var/log/www-slow.log@" "${php_conf}"
+    sed -i "s@^;php_admin_value\[error_log\].*@php_admin_value[error_log] = /var/log/www-error.log@" "${php_conf}"
+    sed -i "s@^;php_admin_flag\[log_errors\].*@php_admin_flag[log_errors] = on@" "${php_conf}"
+    cat >>"${php_conf}" <<EOF
 php_value[session.save_handler] = files
 php_value[session.save_path]    = /var/lib/php/session
 php_value[soap.wsdl_cache_dir]  = /var/lib/php/wsdlcache
 php_value[opcache.file_cache]   = /var/lib/php/opcache
 EOF
 fi
-sed -i "s@^disable_functions.*@disable_functions = passthru,exec,shell_exec,system,chroot,chgrp,chown,proc_open,proc_get_status,ini_alter,ini_alter,ini_restore@" ${php_ini}
-sed -i "s@^max_execution_time.*@max_execution_time = 300@" ${php_ini}
-sed -i "s@^max_input_time.*@max_input_time = 300@" ${php_ini}
-sed -i "s@^post_max_size.*@post_max_size = 128M@" ${php_ini}
-sed -i "s@^upload_max_filesize.*@upload_max_filesize = 128M@" ${php_ini}
-sed -i "s@^expose_php.*@expose_php = Off@" ${php_ini}
-sed -i "s@^short_open_tag.*@short_open_tag = On@" ${php_ini}
-sed -i "s#mysqli.default_socket.*#mysqli.default_socket = ${sock_location}#" ${php_ini}
-sed -i "s#pdo_mysql.default_socket.*#pdo_mysql.default_socket = ${sock_location}#" ${php_ini}
+sed -i "s@^disable_functions.*@disable_functions = passthru,exec,shell_exec,system,chroot,chgrp,chown,proc_open,proc_get_status,ini_alter,ini_alter,ini_restore@" "${php_ini}"
+sed -i "s@^max_execution_time.*@max_execution_time = 300@" "${php_ini}"
+sed -i "s@^max_input_time.*@max_input_time = 300@" "${php_ini}"
+sed -i "s@^post_max_size.*@post_max_size = 128M@" "${php_ini}"
+sed -i "s@^upload_max_filesize.*@upload_max_filesize = 128M@" "${php_ini}"
+sed -i "s@^expose_php.*@expose_php = Off@" "${php_ini}"
+sed -i "s@^short_open_tag.*@short_open_tag = On@" "${php_ini}"
+sed -i "s#mysqli.default_socket.*#mysqli.default_socket = ${sock_location}#" "${php_ini}"
+sed -i "s#pdo_mysql.default_socket.*#pdo_mysql.default_socket = ${sock_location}#" "${php_ini}"
 _error_detect "chown root:caddy /var/lib/php/session"
 _error_detect "chown root:caddy /var/lib/php/wsdlcache"
 _error_detect "chown root:caddy /var/lib/php/opcache"
