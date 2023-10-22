@@ -41,61 +41,10 @@
         <div align="center">
             <a href="https://teddysun.com/700.html" target="_blank"><img class="aligncenter" style="width: 600px; height: auto;" src="./lcmp.png" alt="LCMP stack installation scripts"></a>
         </div>
-        <p><span><strong>LCMP Upgrade:</strong></span></p>
-        <p>
-            <li>Update PHP:
-                <font color="#008000">yum update -y php-*</font>
-            </li>
-        </p>
-        <p>
-            <li>Update Caddy:
-                <font color="#008000">yum update -y caddy</font>
-            </li>
-        </p>
-        <p>
-            <li>Update MariaDB:
-                <font color="#008000">yum update -y MariaDB-*</font>
-            </li>
-        </p>
-        <p>
-            <span># Change PHP directory's group for Caddy again<span><br>
-            <span>chown root.caddy /var/lib/php/session<span><br>
-            <span>chown root.caddy /var/lib/php/session<span><br>
-            <span>chown root.caddy /var/lib/php/session<span>
-        </p>
-        <p><span><strong>LCMP Uninstall:</strong></span></p>
-        <p>
-            <li>Uninstall PHP:
-                <font color="#008000"> yum remove -y php-*</font>
-            </li>
-        </p>
-        <p>
-            <li>Uninstall Caddy:
-                <font color="#008000"> yum remove -y caddy</font>
-            </li>
-        </p>
-        <p>
-            <li>Uninstall MariaDB:
-                <font color="#008000"> yum remove -y MariaDB-*</font>
-            </li>
-        </p>
-        <p><span><strong>Default Location:</strong></span></p>
-        <p>
-            <li>MariaDB: /var/lib/mysql</li>
-        </p>
-        <p>
-            <li>Web root default location: /data/www/default</li>
-        </p>
-        <p><span><strong>Process Management: </strong></span></p>
-        <p>
-            <li>PHP: systemctl [start|stop|status|restart] php-fpm</li>
-        </p>
-        <p>
-            <li>Caddy: systemctl [start|stop|status|restart] caddy</li>
-        </p>
-        <p>
-            <li>MariaDB: systemctl [start|stop|status|restart] mariadb</li>
-        </p>
+        <p><span>LCMP (Linux + Caddy + MariaDB + PHP) is a powerful bash script for the installation of Caddy2 + MariaDB + PHP and so on.</span></p>
+        <p><span>You can install Caddy2 + MariaDB + PHP in a smaller memory VPS by yum or apt-get command, Just need to input numbers to choose what you want to install before installation.</span></p>
+        <p><span>And all things will be done in a few minutes.</span></p>
+        <p><span>PHP rpm provided by <a href="https://rpms.remirepo.net/" target="_blank">remi Repository</a>, deb provided by <a href="https://deb.sury.org/" target="_blank">deb.sury.org</a></span></p>
         <p><span><strong>More details: </strong></span></p>
         <p>
             <li><a href="https://github.com/teddysun/lcmp" target="_blank">Github project</a></li>
