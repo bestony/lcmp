@@ -26,8 +26,8 @@ And all things will be done in a few minutes.
 ## Supported System
 
 - Enterprise Linux 7 (CentOS 7, RHEL 7)
-- Enterprise Linux 8 (CentOS 8, RHEL 8, Rocky Linux 8, AlmaLinux 8)
-- Enterprise Linux 9 (CentOS 9, RHEL 9, Rocky Linux 9, AlmaLinux 9)
+- Enterprise Linux 8 (CentOS 8, RHEL 8, Rocky Linux 8, AlmaLinux 8, Oracle Linux 8)
+- Enterprise Linux 9 (CentOS 9, RHEL 9, Rocky Linux 9, AlmaLinux 9, Oracle Linux 9)
 - Debian 10
 - Debian 11
 - Debian 12
