@@ -314,6 +314,11 @@ if check_sys rhel; then
         default_zone="$(firewall-cmd --get-default-zone)"
         firewall-cmd --permanent --add-service=https --zone="${default_zone}" >/dev/null 2>&1
         firewall-cmd --permanent --add-service=http --zone="${default_zone}" >/dev/null 2>&1
+        # Enabled udp 443 port for Caddy HTTP/3 feature
+        if ! grep "udp" /usr/lib/firewalld/services/https.xml; then
+            lnum=$(sed -n '/<port/=' /usr/lib/firewalld/services/https.xml)
+            sed -i "${lnum}a\  <port protocol=\"udp\" port=\"443\"/>" /usr/lib/firewalld/services/https.xml
+        fi
         firewall-cmd --reload >/dev/null 2>&1
         sed -i 's@AllowZoneDrifting=yes@AllowZoneDrifting=no@' /etc/firewalld/firewalld.conf
         _error_detect "systemctl restart firewalld"
