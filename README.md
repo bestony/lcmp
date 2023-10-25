@@ -38,7 +38,7 @@ And all things will be done in a few minutes.
 
 - Hard disk space: 5GB
 - RAM: 512MB
-- An internet connection is required
+- Internet connection is required
 - Correct repository
 - User: root
 
@@ -48,7 +48,7 @@ And all things will be done in a few minutes.
 - MariaDB 10.11
 - PHP-7.4, PHP-8.0, PHP-8.1, PHP-8.2
 
-※　PHP rpm provided by [remi Repository](https://rpms.remirepo.net/), deb provided by [deb.sury.org](https://deb.sury.org/)
+※　PHP rpm packages provided by [remi Repository](https://rpms.remirepo.net/), deb packages provided by [deb.sury.org](https://deb.sury.org/)
 
 ## Installation
 
