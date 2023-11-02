@@ -1,11 +1,12 @@
 #!/bin/bash
 #
 # This is a Shell script for VPS initialization and
-# LCMP (Linux + Caddy + MariaDB + PHP) rpm installation
+# LCMP (Linux + Caddy + MariaDB + PHP) installation
+#
 # Supported OS:
 # Enterprise Linux 7 (CentOS 7, RHEL 7)
-# Enterprise Linux 8 (CentOS 8, RHEL 8, Rocky Linux 8, AlmaLinux 8)
-# Enterprise Linux 9 (CentOS 9, RHEL 9, Rocky Linux 9, AlmaLinux 9)
+# Enterprise Linux 8 (CentOS 8, RHEL 8, Rocky Linux 8, AlmaLinux 8, Oracle Linux 8)
+# Enterprise Linux 9 (CentOS 9, RHEL 9, Rocky Linux 9, AlmaLinux 9, Oracle Linux 9)
 # Debian 10
 # Debian 11
 # Debian 12
@@ -367,7 +368,7 @@ echo
 _info "VPS initialization completed"
 sleep 3
 clear
-_info "LCMP (Linux + Caddy + MariaDB + PHP) rpm installation start"
+_info "LCMP (Linux + Caddy + MariaDB + PHP) installation start"
 if check_sys rhel; then
     if get_rhelversion 7; then
         _error_detect "yum install -yq yum-plugin-copr"
@@ -576,4 +577,4 @@ systemctl --no-pager -l status caddy
 echo
 netstat -nxtulpe
 echo
-_info "LCMP (Linux + Caddy + MariaDB + PHP) rpm installation completed"
+_info "LCMP (Linux + Caddy + MariaDB + PHP) installation completed"
