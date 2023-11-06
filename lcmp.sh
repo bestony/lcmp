@@ -553,6 +553,8 @@ cat >/etc/caddy/conf.d/default.conf <<EOF
 }
 EOF
 
+_error_detect "cp -f ${cur_dir}/conf/lcmp /usr/bin/"
+_error_detect "chmod 755 /usr/bin/lcmp"
 _error_detect "chown -R caddy:caddy /data/www"
 _error_detect "systemctl daemon-reload"
 _error_detect "systemctl start ${php_fpm}"

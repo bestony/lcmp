@@ -20,6 +20,7 @@ And all things will be done in a few minutes.
 - [Uninstall](#uninstall)
 - [Default Location](#default-location)
 - [Process Management](#process-management)
+- [lcmp command](#lcmp-command)
 - [Bugs & Issues](#bugs--issues)
 - [License](#license)
 
@@ -139,6 +140,22 @@ apt-get remove -y php${php_ver}-*
 | PHP (deb)   | systemctl [start\|stop\|status\|restart] php${php_ver}-fpm |
 | Caddy       | systemctl [start\|stop\|status\|restart] caddy             |
 | MariaDB     | systemctl [start\|stop\|status\|restart] mariadb           |
+
+## lcmp Command
+
+| Command          | Description                                           |
+|------------------|-------------------------------------------------------|
+| lcmp start       | Start all of LCMP services                            |
+| lcmp stop        | Stop all of LCMP services                             |
+| lcmp restart     | Restart all of LCMP services                          |
+| lcmp status      | Check all of LCMP services status                     |
+| lcmp vhost add   | Create a new Caddy virtual host                       |
+| lcmp vhost list  | List all of Caddy virtual hosts                       |
+| lcmp vhost del   | Delete a Caddy virtual host                           |
+| lcmp db add      | Create a MariaDB database and a user with same name   |
+| lcmp db list     | List all of MariaDB databases                         |
+| lcmp db del      | Delete a MariaDB database and a user with same name   |
+| lcmp db edit     | Update a MariaDB database username's password         |
 
 ## Bugs & Issues
 
