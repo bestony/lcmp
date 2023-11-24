@@ -27,8 +27,8 @@ And all things will be done in a few minutes.
 ## Supported System
 
 - Enterprise Linux 7 (CentOS 7, RHEL 7)
-- Enterprise Linux 8 (CentOS 8, RHEL 8, Rocky Linux 8, AlmaLinux 8, Oracle Linux 8)
-- Enterprise Linux 9 (CentOS 9, RHEL 9, Rocky Linux 9, AlmaLinux 9, Oracle Linux 9)
+- Enterprise Linux 8 (CentOS Stream 8, RHEL 8, Rocky Linux 8, AlmaLinux 8, Oracle Linux 8)
+- Enterprise Linux 9 (CentOS Stream 9, RHEL 9, Rocky Linux 9, AlmaLinux 9, Oracle Linux 9)
 - Debian 10
 - Debian 11
 - Debian 12
@@ -47,7 +47,7 @@ And all things will be done in a few minutes.
 
 - Caddy 2
 - MariaDB 10.11
-- PHP-7.4, PHP-8.0, PHP-8.1, PHP-8.2
+- PHP-7.4, PHP-8.0, PHP-8.1, PHP-8.2, PHP-8.3
 
 ※　PHP rpm packages provided by [remi Repository](https://rpms.remirepo.net/), deb packages provided by [deb.sury.org](https://deb.sury.org/)
 

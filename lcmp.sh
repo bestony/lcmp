@@ -222,6 +222,7 @@ while true; do
     _info "$(_green 2). PHP 8.0"
     _info "$(_green 3). PHP 8.1"
     _info "$(_green 4). PHP 8.2"
+    _info "$(_green 5). PHP 8.3"
     read -r -p "[$(date)] Please input a number: (Default 4) " php_version
     [ -z "${php_version}" ] && php_version=4
     case "${php_version}" in
@@ -269,8 +270,19 @@ while true; do
         fi
         break
         ;;
+    5)
+        php_ver="8.3"
+        if check_sys rhel; then
+            if get_rhelversion 7; then
+                remi_php="remi-php83"
+            else
+                remi_php="php:remi-${php_ver}"
+            fi
+        fi
+        break
+        ;;
     *)
-        _info "Input error! Please only input a number 1 2 3 4"
+        _info "Input error! Please only input a number 1 2 3 4 5"
         ;;
     esac
 done
